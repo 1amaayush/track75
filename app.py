@@ -3,27 +3,27 @@ from datetime import datetime
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
+import os
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
+app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
+
 # ---- MongoDB setup ----
-# Default Mongo URI for local server
-MONGO_URI = "mongodb://localhost:27017/"
+# Read connection string from environment (Atlas or Cosmos DB in production)
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
 client = MongoClient(MONGO_URI)
-db = client.tracker75
+
+# Use 'track75' database
+db = client.track75
 user_coll = db.users
 attendance_coll = db.attendance
+test_coll = db.test  # optional test collection
 
-# Use (or create) 'track75' database
-db = client.track75
-
-# A quick test collection
-test_coll = db.test
-
-# ---- Test route ----
+# ---- Routes ----
 @app.route("/")
 def home():
     return render_template("home.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -72,7 +72,6 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/logout")
 def logout():
     session.clear()
@@ -90,7 +89,7 @@ def attendance():
         flash("User not found.", "error")
         return redirect(url_for("logout"))
 
-    subjects = user.get("subjects", [])  # dynamic subject list
+    subjects = user.get("subjects", [])
     today = datetime.utcnow().date().isoformat()
 
     if request.method == "POST":
@@ -172,7 +171,6 @@ def overview():
 
             total_classes += 1
 
-    # Calculate percentages
     for subject in subject_data:
         p = subject_data[subject]["present"]
         a = subject_data[subject]["absent"]
@@ -218,9 +216,7 @@ def add_past_attendance():
 
     return render_template("attendance.html", subjects=subjects, allow_date=True)
 
-
+# ---- Local dev only ----
 if __name__ == "__main__":
-    app.run(debug=True)
-    import os
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
