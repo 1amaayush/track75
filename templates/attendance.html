@@ -1,0 +1,48 @@
+<!-- attendance.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-2 text-center">{{ 'Add Attendance' if allow_date else 'Mark Attendance for Today' }}</h2>
+
+        {% if allow_date %}
+        <div class="mb-4">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="date" class="form-label">Select Date</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+        {% else %}
+        <p class="text-center mb-4">
+            <strong>Date:</strong> {{ today.strftime('%B %d, %Y') }}
+        </p>
+        <form method="POST">
+        {% endif %}
+
+            {% if subjects|length == 0 %}
+                <div class="alert alert-warning text-center">
+                    No subjects found for your profile. Please update your subjects first.
+                </div>
+            {% else %}
+                {% for subject in subjects %}
+                <div class="mb-3 row align-items-center">
+                    <label class="col-sm-4 col-form-label">{{ subject }}</label>
+                    <div class="col-sm-8">
+                        <select name="{{ subject }}" class="form-select" required>
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="No Lecture Today">No Lecture Today</option>
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">Submit Attendance</button>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

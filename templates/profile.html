@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4 text-center">User Profile</h2>
+        <form method="POST">
+            <div class="mb-4">
+                <label for="department" class="form-label">Department</label>
+                <input type="text" name="department" class="form-control" required value="{{ user.department if user and user.department else '' }}">
+            </div>
+
+            <h5 class="mb-3">Subjects</h5>
+            {% for i in range(1, 9) %}
+                <div class="mb-3">
+                    <label for="subject{{ i }}" class="form-label">Subject {{ i }}</label>
+                    <input type="text" name="subject{{ i }}" class="form-control" value="{{ user.subjects[i-1] if user.subjects and user.subjects|length >= i else '' }}">
+                </div>
+            {% endfor %}
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="text-center mb-4">Attendance Overview</h2>
+
+        {% if total_classes == 0 %}
+            <div class="alert alert-warning text-center">
+                No attendance records found yet.
+            </div>
+        {% else %}
+        <div class="mb-4">
+            <h5>Total Summary</h5>
+            <ul class="list-group">
+                <li class="list-group-item">Total Days Logged: {{ total_days }}</li>
+                <li class="list-group-item">Total Classes (excluding Cancelled): {{ total_classes }}</li>
+                <li class="list-group-item">Total Present: {{ total_present }}</li>
+                <li class="list-group-item">Total Absent: {{ total_absent }}</li>
+                <li class="list-group-item">Overall Attendance: <strong>{{ overall_percent }}%</strong></li>
+            </ul>
+        </div>
+
+        <div class="mb-4">
+            <h5>Subject-wise Summary</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Attendance %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject, stats in subject_data.items() %}
+                    <tr>
+                        <td>{{ subject }}</td>
+                        <td>{{ stats.present }}</td>
+                        <td>{{ stats.absent }}</td>
+                        <td>{{ stats.percent }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

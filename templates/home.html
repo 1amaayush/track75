@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+  {% if not session.user_id %}
+    <div class="text-center">
+        <h1 class="mb-3">Welcome to <span class="text-primary">Track75</span></h1>
+        <p class="lead">Track your attendance, stay above the line.</p>
+        <div class="mt-4">
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg me-3">Register</a>
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+        </div>
+    </div>
+  {% else %}
+    <div class="text-center">
+        <h1 class="mb-3">Welcome back, {{ session.username }} 👋</h1>
+        <p class="lead">Ready to update your attendance?</p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-center">
+    <a href="{{ url_for('attendance') }}" class="btn btn-success btn-lg">Go to Attendance</a>
+    <a href="{{ url_for('add_past_attendance') }}" class="btn btn-outline-primary btn-lg">Add Missed Attendance</a>
+</div>
+
+    </div>
+  {% endif %}
+{% endblock %}
