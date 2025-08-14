@@ -10,7 +10,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
 
 # ---- MongoDB setup ----
 # Read connection string from environment (Atlas or Cosmos DB in production)
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://amaayushmaan:gWj0U8OqRC118X4L@track75.odgahpu.mongodb.net/?retryWrites=true&w=majority&appName=track75")
 client = MongoClient(MONGO_URI)
 
 # Use 'track75' database
